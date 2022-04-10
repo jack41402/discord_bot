@@ -13,25 +13,6 @@ class Main(Cog_Extension):
     async def hi(self, ctx):
         await ctx.send("hi")
 
-    @commands.group()
-    async def codetest(self, ctx):
-        pass
-
-    @codetest.command()
-    async def python(self, ctx):
-        await ctx.send("Python")
-
-    @codetest.command()
-    async def java(self, ctx):
-        await ctx.send("Java")
-
-    @codetest.command()
-    async def cpp(self, ctx):
-        await ctx.send("C++")
-
-    @commands.command()
-    async def cmdA(self, ctx, num):
-        await ctx.send(num)
 
 def setup(bot):
     bot.add_cog(Main(bot))

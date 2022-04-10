@@ -10,40 +10,21 @@ with open("setting.json", 'r', encoding="utf8") as jfile:
 
 
 class Event(Cog_Extension):
+    # 成員加入訊息
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = self.bot.get_channel(int(jdata["bot_channel"]))
         print(f"{member} join!")
         await channel.send(f"{member} join!")
 
+    # 成員離開訊息
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(jdata["bot_channel"]))
         print(f"{member} leave!")
         await channel.send(f"{member} leave!")
 
-    # @commands.Cog.listener()
-    # async def on_message(self, msg):
-    #     if msg.startswith == 123 and msg.author != self.bot.user:
-    #         await msg.channel.send(msg.content)
-
-    @commands.command()
-    async def em(self, ctx):
-        embed = discord.Embed(title="jack41402", url="https://www.facebook.com/jack41402", description="none",
-                              color=0x00ccff, timestamp=datetime.datetime.utcnow())
-        embed.set_author(name="Jack", url="https://www.facebook.com/jack41402", icon_url="https://imgur.com/a/38DFlbf")
-        embed.add_field(name="11", value="1111", inline=True)
-        embed.add_field(name="22", value="2222", inline=True)
-        embed.add_field(name="33", value="3333", inline=True)
-        embed.add_field(name="44", value="4444", inline=True)
-        embed.set_footer(text="123456789")
-        await ctx.send(embed=embed)
-
-    @commands.command()
-    async def sayd(self, ctx, *, msg):
-        await ctx.message.delete()
-        await ctx.send(msg)
-
+    # 刪除伺服器中的訊息
     @commands.command()
     async def clean(self, ctx, num: int):
         await ctx.channel.purge(limit=num+1)
@@ -56,6 +37,32 @@ class Event(Cog_Extension):
         elif isinstance(error, commands.errors.CommandNotFound):
             await ctx.send("沒這指令啦")
         await ctx.send(error)
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, data):
+        # 新增反應獲取身分組
+        if data.emoji.name == "🟩":
+            print(123456789)
+            guild = self.bot.get_guild(data.guild_id)
+            role = guild.get_role(875829371854798859)
+            await data.member.add_roles(role)
+        if data.emoji.name == "🟥":
+            print(123456789)
+            guild = self.bot.get_guild(data.guild_id)
+            role = guild.get_role(875829371854798858)
+            await data.member.add_roles(role)
+        print(data.emoji)
+        print(data.member)
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, msg):
+        count = 0
+        async for auditlog in msg.guild.audit_logs(action=discord.AuditLogAction.message_delete):
+            if count == 0:
+                await msg.channel.send(auditlog.user.name)
+                count += 1
+        await msg.channel.send("刪除訊息內容："+str(msg.content))
+        await msg.channel.send("訊息作者：" + str(msg.author))
 
 
 def setup(bot):
