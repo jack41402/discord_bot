@@ -38,9 +38,9 @@ class Event(Cog_Extension):
             await ctx.send("沒這指令啦")
         await ctx.send(error)
 
+    # 新增反應獲取身分組
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, data):
-        # 新增反應獲取身分組
         if data.emoji.name == "🟩":
             print(123456789)
             guild = self.bot.get_guild(data.guild_id)
@@ -54,6 +54,7 @@ class Event(Cog_Extension):
         print(data.emoji)
         print(data.member)
 
+    # 回傳審核日誌中刪除訊息的詳細內容
     @commands.Cog.listener()
     async def on_message_delete(self, msg):
         count = 0
